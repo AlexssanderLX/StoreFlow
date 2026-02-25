@@ -1,0 +1,196 @@
+﻿@page
+@model StoreFlow.Pages.Admin.IndexModel
+@using StoreFlow.Models
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f6f9;
+    }
+
+    .container {
+        max-width: 950px;
+        margin: 40px auto;
+        padding: 0 12px;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        margin-bottom: 18px;
+    }
+
+    .card {
+        background: #fff;
+        border-radius: 12px;
+        padding: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,.08);
+        margin-bottom: 14px;
+    }
+
+    .row {
+        display: flex;
+        gap: 10px;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+    }
+
+    button {
+        padding: 8px 12px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .btn-secondary {
+        background: #6b7280;
+        color: #fff;
+    }
+
+    .btn-danger {
+        background: #dc2626;
+        color: #fff;
+    }
+
+    .btn-warn {
+        background: #b45309;
+        color: #fff;
+    }
+
+    .btn-primary {
+        background: #2563eb;
+        color: #fff;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0,0,0,.08);
+        margin-top: 15px;
+    }
+
+    th, td {
+        padding: 12px;
+        border-bottom: 1px solid #e5e7eb;
+        text-align: left;
+    }
+
+    th {
+        background: #f9fafb;
+        font-weight: 700;
+    }
+
+    .muted {
+        color: #6b7280;
+        font-size: 12px;
+    }
+</style>
+
+<div class="container">
+
+    <div class="header">
+        <div>
+            <h2 style="margin:0;">Área do Gerente</h2>
+            <div class="muted">Gerenciar registros</div>
+        </div>
+        <a href="/" class="muted">Voltar</a>
+    </div>
+
+    <div class="card">
+        <form method="post" asp-page-handler="ClearAll"
+              onsubmit="return confirm('Apagar tudo?');">
+            <button type="submit" class="btn-danger">Apagar tudo</button>
+        </form>
+    </div>
+
+    <!-- PENDENTES -->
+    <h3>Itens Pendentes</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width:200px;">Data</th>
+                <th>Item</th>
+                <th style="width:260px;">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Pending)
+            {
+                <tr>
+                    <td>@item.CreatedAt.ToLocalTime()</td>
+                    <td>@item.Text</td>
+                    <td>
+
+                        <form method="post" asp-page-handler="ChangeStatus" style="display:inline;">
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <input type="hidden" name="status" value="Ordered" />
+                            <button class="btn-warn">Pedir</button>
+                        </form>
+
+                        <form method="post" asp-page-handler="ChangeStatus" style="display:inline;">
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <input type="hidden" name="status" value="Canceled" />
+                            <button class="btn-secondary">Cancelar</button>
+                        </form>
+
+                        <form method="post" asp-page-handler="Delete"
+                              style="display:inline;"
+                              onsubmit="return confirm('Excluir?');">
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <button class="btn-danger">Excluir</button>
+                        </form>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- PEDIDOS -->
+    <h3 style="margin-top:40px;">Itens Já Pedidos</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width:200px;">Data</th>
+                <th>Item</th>
+                <th style="width:200px;">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Ordered)
+            {
+                <tr>
+                    <td>@item.CreatedAt.ToLocalTime()</td>
+                    <td>@item.Text</td>
+                    <td>
+
+                        <form method="post" asp-page-handler="ChangeStatus" style="display:inline;">
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <input type="hidden" name="status" value="Resolved" />
+                            <button class="btn-primary">Resolver</button>
+                        </form>
+
+                        <form method="post" asp-page-handler="Delete"
+                              style="display:inline;"
+                              onsubmit="return confirm('Excluir?');">
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <button class="btn-danger">Excluir</button>
+                        </form>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

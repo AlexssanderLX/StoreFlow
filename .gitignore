@@ -1,0 +1,36 @@
+# Build folders
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio
+.vs/
+
+# Rider
+.idea/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# ASP.NET Core
+appsettings.Development.json
+
+# Publish output
+publish/
+*.publishsettings
+
+# Node (caso use no futuro)
+node_modules/
+
+# SQLite database (se não quiser versionar o banco real)
+*.db
+*.sqlite
